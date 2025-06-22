@@ -4,8 +4,8 @@ use std::{collections::HashMap, env};
 
 #[derive(Debug)]
 struct Portfolio {
-    balance: f32,
-    assets: HashMap<String, i32>,
+    cash_balance: f32,
+    assets: HashMap<String, f32>,
 }
 
 #[tokio::main]
@@ -51,7 +51,7 @@ fn main() {
     // println!("STOCK: {}, PRICE: ${:?}", ticker, x);
 
     let mut main_portfolio = Portfolio {
-        balance: 0.0,
+        cash_balance: 0.0,
         assets: HashMap::new(),
     };
 
@@ -63,9 +63,12 @@ fn main() {
     println!("STOCK: {}, PRICE: ${:?}", ticker, price);
     println!("STOCK: {}, PRICE: ${:?}, Cost to buy {} shares = {}", 
     ticker, price, shares, cost_to_buy_x_shares);
-    
-    dbg!(&main_portfolio);
 
-    main_portfolio.balance = 100.0;
+    main_portfolio.cash_balance = 100.0;
+    main_portfolio.assets.insert("AAPL".to_string(), 2.0);
+    main_portfolio.assets.insert("MSFT".to_string(), 1.5);
+    main_portfolio.assets.insert("GOOGL".to_string(), 3.0);
+    main_portfolio.assets.insert("AMZN".to_string(), 2.5);
+    main_portfolio.assets.insert("TSLA".to_string(), 2.0);
     dbg!(&main_portfolio);
 }
