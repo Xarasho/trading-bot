@@ -36,7 +36,11 @@ async fn get_current_stock_price(api_key: String, ticker: &str) -> Result<f32, E
 
 fn calculate_portfolio_worth(portfolio: Portfolio) -> f32 {
     for stock in portfolio.assets {
-        println!("{:?}", stock)
+        
+        let ticker = stock.0;
+        let amount_shares = stock.1;
+
+        println!("Ticker: {}, Amount: {}", ticker, amount_shares);
     }
 
     1.1
