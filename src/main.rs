@@ -9,8 +9,16 @@ struct Portfolio {
 }
 
 #[tokio::main]
-async fn get_current_stock_price(api_key: String, ticker: &str) -> Result<f32, Error> {
-    
+async fn get_current_stock_price(ticker: &str) -> Result<f32, Error> {
+    // Reading API KEY
+    dotenv().ok();
+    let api_key = match env::var("API_KEY") {
+        Ok(key) => key,
+        Err(_) => {
+            eprintln!("Error: API_KEY environment variable not found!");
+            std::process::exit(1);
+        }
+    };
 
     let url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="
         .to_owned()
@@ -35,27 +43,31 @@ async fn get_current_stock_price(api_key: String, ticker: &str) -> Result<f32, E
 }
 
 fn calculate_portfolio_worth(portfolio: Portfolio) -> f32 {
+    let mut total: f32 = 0.0;
+
     for stock in portfolio.assets {
         
         let ticker = stock.0;
         let amount_shares = stock.1;
+        let price_per_share = get_current_stock_price(ticker.as_str());
 
-        println!("Ticker: {}, Amount: {}", ticker, amount_shares);
+        match price_per_share {
+            Ok(value) => {
+                let share_worth = amount_shares * value;
+                println!("Ticker: {}, Shares: {}, Price per share: {:?}, Total: {:?}",
+                ticker, amount_shares, price_per_share, share_worth);
+                total += share_worth;
+            }
+            Err(err) => {
+                println!("An error ocurred: {}", err);
+            }
+        }
     }
-
-    1.1
+    return total;
 }
 
 fn main() {
-    // Reading API KEY
-    dotenv().ok();
-    let api_key = match env::var("API_KEY") {
-        Ok(key) => key,
-        Err(_) => {
-            eprintln!("Error: API_KEY environment variable not found!");
-            std::process::exit(1);
-        }
-    };
+    
     
     // let ticker = "AAPL";
     // let x = get_current_stock_price(api_key, ticker).unwrap();
@@ -74,9 +86,9 @@ fn main() {
     main_portfolio.cash_balance = 100.0;
     main_portfolio.assets.insert("AAPL".to_string(), 2.0);
     main_portfolio.assets.insert("MSFT".to_string(), 1.5);
-    main_portfolio.assets.insert("GOOGL".to_string(), 3.0);
-    main_portfolio.assets.insert("AMZN".to_string(), 2.5);
-    main_portfolio.assets.insert("TSLA".to_string(), 2.0);
+    // main_portfolio.assets.insert("GOOGL".to_string(), 3.0);
+    // main_portfolio.assets.insert("AMZN".to_string(), 2.5);
+    // main_portfolio.assets.insert("TSLA".to_string(), 2.0);
     dbg!(&main_portfolio);
 
     let x = calculate_portfolio_worth(main_portfolio);
