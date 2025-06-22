@@ -34,6 +34,14 @@ async fn get_current_stock_price(api_key: String, ticker: &str) -> Result<f32, E
     Ok(temp_f32)
 }
 
+fn calculate_portfolio_worth(portfolio: Portfolio) -> f32 {
+    for stock in portfolio.assets {
+        println!("{:?}", stock)
+    }
+
+    1.1
+}
+
 fn main() {
     // Reading API KEY
     dotenv().ok();
@@ -44,7 +52,6 @@ fn main() {
             std::process::exit(1);
         }
     };
-
     
     // let ticker = "AAPL";
     // let x = get_current_stock_price(api_key, ticker).unwrap();
@@ -55,15 +62,11 @@ fn main() {
         assets: HashMap::new(),
     };
 
-    let ticker = "AAPL";
-    let price: f32 = 201.39;
-    let shares: f32 = 5.0;
-
-    let cost_to_buy_x_shares: f32 = price * shares;
-    println!("STOCK: {}, PRICE: ${:?}", ticker, price);
-    println!("STOCK: {}, PRICE: ${:?}, Cost to buy {} shares = {}", 
-    ticker, price, shares, cost_to_buy_x_shares);
-
+    //let cost_to_buy_x_shares: f32 = price * shares;
+    //println!("STOCK: {}, PRICE: ${:?}", ticker, price);
+    //println!("STOCK: {}, PRICE: ${:?}, Cost to buy {} shares = {}", 
+    //ticker, price, shares, cost_to_buy_x_shares);
+    
     main_portfolio.cash_balance = 100.0;
     main_portfolio.assets.insert("AAPL".to_string(), 2.0);
     main_portfolio.assets.insert("MSFT".to_string(), 1.5);
@@ -71,4 +74,17 @@ fn main() {
     main_portfolio.assets.insert("AMZN".to_string(), 2.5);
     main_portfolio.assets.insert("TSLA".to_string(), 2.0);
     dbg!(&main_portfolio);
+
+    let x = calculate_portfolio_worth(main_portfolio);
+    println!("Portfolio worth: ${}", x);
+    
+    // let ticker = "AAPL";
+    // let price: f32 = 201.39;
+    // let shares: f32 = 5.0;
+
+    // if main_portfolio.cash_balance > price * shares {
+    //     println!("You can buy");
+    // } else {
+    //     println!("You cant afford it");
+    // }
 }
