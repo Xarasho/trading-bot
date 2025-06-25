@@ -76,6 +76,13 @@ fn add_stock_to_portfolio(mut portfolio: Portfolio, symbol: String, amount_of_sh
     portfolio
 }
 
+fn update_cash_balance(mut portfolio: Portfolio, update_value: f32) -> Portfolio {
+    let current_value = portfolio.cash_balance;
+    let new_value = current_value + update_value;
+    portfolio.cash_balance = new_value;
+    return portfolio;
+}
+
 fn main() {
 
     let mut main_portfolio = Portfolio {
@@ -88,7 +95,8 @@ fn main() {
     //println!("STOCK: {}, PRICE: ${:?}, Cost to buy {} shares = {}", 
     //ticker, price, shares, cost_to_buy_x_shares);
     
-    main_portfolio.cash_balance = 100.0;
+    //main_portfolio.cash_balance = 100.0;
+    main_portfolio = update_cash_balance(main_portfolio, 222.0);
     main_portfolio = add_stock_to_portfolio(main_portfolio, "AAPL".to_string(), 2.0);
     main_portfolio = add_stock_to_portfolio(main_portfolio, "MSFT".to_string(), 2.0);
     main_portfolio = add_stock_to_portfolio(main_portfolio, "TSLA".to_string(), 2.0);
