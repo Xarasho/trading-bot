@@ -55,7 +55,11 @@ fn calculate_portfolio_worth(portfolio: Portfolio) -> f32 {
             Ok(value) => {
                 let share_worth = amount_shares * value;
                 println!("Ticker: {}, Shares: {}, Price per share: {:?}, Total: {:?}",
-                ticker, amount_shares, price_per_share, share_worth);
+                ticker,
+                amount_shares,
+                price_per_share.unwrap(),
+                share_worth);
+
                 total += share_worth;
             }
             Err(err) => {
@@ -66,12 +70,13 @@ fn calculate_portfolio_worth(portfolio: Portfolio) -> f32 {
     return total;
 }
 
+fn add_stock_to_portfolio(mut portfolio: Portfolio, symbol: String, amount_of_shares: f32) -> Portfolio {
+    println!("Adding, {}: {}, to portfolio", symbol, amount_of_shares);
+    portfolio.assets.insert(symbol, amount_of_shares);
+    portfolio
+}
+
 fn main() {
-    
-    
-    // let ticker = "AAPL";
-    // let x = get_current_stock_price(api_key, ticker).unwrap();
-    // println!("STOCK: {}, PRICE: ${:?}", ticker, x);
 
     let mut main_portfolio = Portfolio {
         cash_balance: 0.0,
@@ -84,15 +89,20 @@ fn main() {
     //ticker, price, shares, cost_to_buy_x_shares);
     
     main_portfolio.cash_balance = 100.0;
-    main_portfolio.assets.insert("AAPL".to_string(), 2.0);
-    main_portfolio.assets.insert("MSFT".to_string(), 1.5);
-    // main_portfolio.assets.insert("GOOGL".to_string(), 3.0);
-    // main_portfolio.assets.insert("AMZN".to_string(), 2.5);
-    // main_portfolio.assets.insert("TSLA".to_string(), 2.0);
+    main_portfolio = add_stock_to_portfolio(main_portfolio, "AAPL".to_string(), 2.0);
+    main_portfolio = add_stock_to_portfolio(main_portfolio, "MSFT".to_string(), 2.0);
+    main_portfolio = add_stock_to_portfolio(main_portfolio, "TSLA".to_string(), 2.0);
+    main_portfolio = add_stock_to_portfolio(main_portfolio, "GOOGL".to_string(), 2.0);
+    main_portfolio = add_stock_to_portfolio(main_portfolio, "AMZN".to_string(), 2.0);
+    //main_portfolio.assets.insert("AAPL".to_string(), 2.0);
+    //main_portfolio.assets.insert("MSFT".to_string(), 1.5);
+    //main_portfolio.assets.insert("GOOGL".to_string(), 3.0);
+    //main_portfolio.assets.insert("AMZN".to_string(), 2.5);
+    //main_portfolio.assets.insert("TSLA".to_string(), 2.0);
     dbg!(&main_portfolio);
 
-    let x = calculate_portfolio_worth(main_portfolio);
-    println!("Portfolio worth: ${}", x);
+    // let x = calculate_portfolio_worth(main_portfolio);
+    // println!("Portfolio worth: ${}", x);
     
     // let ticker = "AAPL";
     // let price: f32 = 201.39;
