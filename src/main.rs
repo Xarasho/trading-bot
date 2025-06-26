@@ -89,6 +89,21 @@ fn update_cash_balance(mut portfolio: Portfolio, update_value: f32) -> Portfolio
     return portfolio;
 }
 
+fn update_stock_position(mut portfolio: Portfolio, symbol: String, update_value: f32) -> Portfolio {
+    
+    match portfolio.assets.get_mut(&symbol) {
+        Some(value) => {
+            let new_value = *value + update_value;
+            *value = new_value
+        }
+        None => {
+            println!("None")
+        }
+    }
+
+    portfolio
+}
+
 fn main() {
 
     let mut main_portfolio = Portfolio {
@@ -115,6 +130,7 @@ fn main() {
     //main_portfolio.assets.insert("GOOGL".to_string(), 3.0);
     //main_portfolio.assets.insert("AMZN".to_string(), 2.5);
     //main_portfolio.assets.insert("TSLA".to_string(), 2.0);
+    main_portfolio = update_stock_position(main_portfolio, "AMZN".to_string(), -1.5);
     dbg!(&main_portfolio);
 
     // let x = calculate_portfolio_worth(main_portfolio);
