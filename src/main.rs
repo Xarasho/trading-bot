@@ -12,6 +12,7 @@ struct Portfolio {
 #[derive(Debug)]
 struct Trade_Position {
     ticker: String,
+    size: f32, // size in shares
     open_price: f32,
     close_price: f32,
     // time_open: ?, 
@@ -151,6 +152,20 @@ fn update_stock_position(mut portfolio: Portfolio, symbol: String, update_value:
     portfolio
 }
 
+fn open_trade(ticker: &str, amount_of_shares: f32) -> Trade_Position {
+    let price_per_share = finnhub_get_current_stock_price(ticker).unwrap();
+    
+    println!("{:?}", price_per_share);
+
+    let temp = Trade_Position {
+        ticker: ticker.to_string(),
+        size: amount_of_shares,
+        open_price: price_per_share,
+        close_price: -100000000.0, // This will be updated when the trade is closed
+    };
+    temp
+}
+
 fn main() {
 
     let mut main_portfolio = Portfolio {
@@ -183,12 +198,15 @@ fn main() {
     dbg!(&main_portfolio);
     // dbg!(calculate_portfolio_worth(main_portfolio));
 
-    let temp = Trade_Position {
-        ticker: "AAPL".to_string(),
-        open_price: -100000000.0,
-        close_price: -100000000.0,
-    };
-    dbg!(temp);
+    // let temp = Trade_Position {
+    //     ticker: "AAPL".to_string(),
+    //     open_price: -100000000.0,
+    //     close_price: -100000000.0,
+    // };
+    // dbg!(temp);
+
+    let x = open_trade("AAPL", 1.0);
+    dbg!(x);
 
     //let x = calculate_portfolio_worth(main_portfolio);
     // println!("Portfolio worth: ${}", x);
